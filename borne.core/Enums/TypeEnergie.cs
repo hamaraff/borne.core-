@@ -9,7 +9,6 @@ namespace borne.core.Enums
     public enum TypeEnergie
     {
         Electricite,
-        Gaz,
-        Essence
+        Eau
     }
 }
