@@ -1,0 +1,57 @@
+## Visual Studio / .NET
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio working directory
+.vs/
+
+# Rider
+.idea/
+
+# Build artifacts
+artifacts/
+publish/
+
+# NuGet
+packages/
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+
+# Test results
+TestResults/
+*.trx
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# DotCover
+*.dotCover
+
+# ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+# Visual Studio Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Secrets and local config
+secrets.json
+*.usersecrets
+appsettings.*.Local.json
+
+# Ignore compiled Python files (if any)
+__pycache__/
+*.pyc
