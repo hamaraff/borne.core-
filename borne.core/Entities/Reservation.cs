@@ -15,5 +15,7 @@ namespace borne.core.Entities
         public DateTime DateFin { get; set; }
         public List<Consommation> Consommations { get; set; }
         public List<Seuil> Seuils { get; set; }
+
+        public string Tag { get; set; }
     }
 }
