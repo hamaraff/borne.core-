@@ -8,9 +8,10 @@ namespace borne.core.Entities
 {
     public class Tranche
     {
-        public double valMin {  get; set; }
-        public double valMax {  get ; set; }
-        public double prix {  get; set; }
-        public Tarif Tarif { get; set; }
+        public int IdTranche { get; set; }
+        public double ValMin {  get; set; }
+        public double ValMax {  get ; set; }
+        public double Prix {  get; set; }
+        public int IdTarif { get; set; }
     }
 }

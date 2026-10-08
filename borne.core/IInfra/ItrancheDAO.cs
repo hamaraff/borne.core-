@@ -9,12 +9,11 @@ namespace borne.core.IInfra
 {
     public interface ITrancheDAO
     {
-        List<Tranche> getAll();
-        List<Tranche> getByTarifId(int tarifId);
-        void add(Tranche tranche);
-        void update(Tranche tranche);
-        void delete(Tranche tranche);
+        List<Tranche> GetAll();
+        List<Tranche> GetByTarifId(int tarifId);
 
-
+        void Add(Tranche tranche);
+        void Update(Tranche tranche);
+        void Delete(Tranche tranche);
     }
 }

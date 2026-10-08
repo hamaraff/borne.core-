@@ -13,8 +13,8 @@ namespace borne.core.IInfra
         List<Consommation> GetAll();
         List<Consommation> GetByReservationId(int reservationId);
 
-        List<Consommation> getByDate(DateTime date);
-        List<Consommation> getByDateRange(DateTime DD, DateTime DF);
+        List<Consommation> GetByDate(DateTime date);
+        List<Consommation> GetByDateRange(DateTime DD, DateTime DF);
         void Add(Consommation consommation);
         void Update(Consommation consommation);
         void Delete(int id);

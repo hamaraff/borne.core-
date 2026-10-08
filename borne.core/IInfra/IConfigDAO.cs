@@ -9,7 +9,8 @@ namespace borne.core.IInfra
 {
     public interface IConfigDAO
     {
-        ConfigBorne GetAllConfigsBorne();
+        List<ConfigBorne> GetAllConfigsBorne();
+
         ConfigBorne GetConfigBorneById(int idConfigBorne);
 
         void AddConfigBorne(ConfigBorne configBorne);
@@ -17,7 +18,5 @@ namespace borne.core.IInfra
         void UpdateConfigBorne(ConfigBorne configBorne);
 
         void DeleteConfigBorne(int idConfigBorne);
-
-
     }
 }

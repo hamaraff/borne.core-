@@ -41,8 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Entities\Client.cs" />
+    <Compile Include="Entities\ConfigBorne.cs" />
     <Compile Include="Entities\Consommation.cs" />
     <Compile Include="Entities\Reservation.cs" />
     <Compile Include="Entities\Seuil.cs" />
@@ -50,6 +50,7 @@
     <Compile Include="Entities\Tranche.cs" />
     <Compile Include="Enums\TypeEnergie.cs" />
     <Compile Include="IInfra\IClientDAO.cs" />
+    <Compile Include="IInfra\IConfigDAO.cs" />
     <Compile Include="IInfra\IConsommationDAO.cs" />
     <Compile Include="IInfra\IReservationDAO.cs" />
     <Compile Include="IInfra\ISeuilDAO.cs" />

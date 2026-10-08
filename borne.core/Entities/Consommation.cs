@@ -8,7 +8,7 @@ namespace borne.core.Entities
 {
     public class Consommation
     {
-        public int Id { get; set; }
+        public int IdConsommation { get; set; }
         public DateTime Date { get; set; }
         public int Quantite {  get; set; }
 

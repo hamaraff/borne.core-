@@ -11,11 +11,12 @@ namespace borne.core.IInfra
     public interface ITarifDAO
     {
         Tarif GetById(int id);
-        List<Tarif> getAll();
-        List<Tarif> getByEnergie(TypeEnergie TypeEnergie);
-        void Add(Tarif T);
-        void update(Tarif T);
-        void delete(Tarif T);
+        List<Tarif> GetAll();
+        List<Tarif> GetByEnergie(TypeEnergie typeEnergie);
+
+        void Add(Tarif tarif);
+        void Update(Tarif tarif);
+        void Delete(Tarif tarif);
     }
 
 }
