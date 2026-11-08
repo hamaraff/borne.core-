@@ -1,22 +1,20 @@
 ﻿using borne.core.Entities;
 using borne.core.Enums;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace borne.core.IInfra
 {
     public interface ITarifDAO
     {
-        Tarif GetById(int id);
-        List<Tarif> GetAll();
-        List<Tarif> GetByEnergie(TypeEnergie typeEnergie);
+        Task<Tarif?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<List<Tarif>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<List<Tarif>> GetByEnergieAsync(
+            TypeEnergie typeEnergie,
+            CancellationToken cancellationToken = default);
 
-        void Add(Tarif tarif);
-        void Update(Tarif tarif);
-        void Delete(Tarif tarif);
+        Task AddAsync(Tarif tarif, CancellationToken cancellationToken = default);
+        Task UpdateAsync(Tarif tarif, CancellationToken cancellationToken = default);
+        Task DeleteAsync(Tarif tarif, CancellationToken cancellationToken = default);
     }
 
 }

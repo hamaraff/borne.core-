@@ -1,4 +1,8 @@
 <Solution>
   <Project Path="borne.business/borne.business.csproj" Id="3681445b-3cdc-4a85-812d-e6e4236bb1d6" />
   <Project Path="borne.core/borne.core.csproj" Id="813b8669-8242-4a7c-962a-752696b9ee3b" />
+  <Project Path="borne.infrastructure/borne.infrastructure.csproj" />
+  <Project Path="borne.local.infrastructure/borne.local.infrastructure.csproj" Id="2a50ae6d-58e2-43f6-b77c-e9bb2c31c5ab" />
+  <Project Path="borne.device.api/borne.device.api.csproj" Id="4d704a6e-3f19-4fc8-8e19-16c54dc3f850" />
+  <Project Path="borne.central.api/borne.central.api.csproj" Id="e043a9cf-14bb-477e-971f-5562349e7ff5" />
 </Solution>

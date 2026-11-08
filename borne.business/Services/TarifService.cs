@@ -15,30 +15,23 @@ namespace borne.business.Services
             this.tarifDAO = tarifDAO;
         }
 
-        public List<Tarif> GetAllTarifs()
+        public async Task<List<Tarif>> GetAllTarifsAsync()
         {
-            return tarifDAO.GetAll();
+            return await tarifDAO.GetAllAsync();
         }
 
-        public List<Tarif> GetTarifsByEnergie(TypeEnergie typeEnergie)
+        public async Task<List<Tarif>> GetTarifsByEnergieAsync(TypeEnergie typeEnergie)
         {
-            return tarifDAO.GetByEnergie(typeEnergie);
+            return await tarifDAO.GetByEnergieAsync(typeEnergie);
         }
 
-        public void AddTarif(Tarif tarif)
+        public async Task AddTarifAsync(Tarif tarif)
         {
             if (tarif == null)
             {
                 throw new ArgumentNullException(nameof(tarif));
             }
 
-            if (tarif.Valeur <= 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(tarif.Valeur),
-                    "La valeur du tarif doit être supérieure à 0."
-                );
-            }
 
             if (!Enum.IsDefined(typeof(TypeEnergie), tarif.TypeEnergie))
             {
@@ -48,30 +41,24 @@ namespace borne.business.Services
                 );
             }
 
-            tarifDAO.Add(tarif);
+            await tarifDAO.AddAsync(tarif);
         }
 
-        public void UpdateTarif(Tarif tarif)
+        public async Task UpdateTarifAsync(Tarif tarif)
         {
             if (tarif == null)
             {
                 throw new ArgumentNullException(nameof(tarif));
             }
 
-            Tarif existingTarif = tarifDAO.GetById(tarif.IdTarif);
+            Tarif existingTarif = await tarifDAO.GetByIdAsync(tarif.IdTarif);
 
             if (existingTarif == null)
             {
                 throw new ArgumentException("Le tarif n'existe pas.");
             }
 
-            if (tarif.Valeur <= 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(tarif.Valeur),
-                    "La valeur du tarif doit être supérieure à 0."
-                );
-            }
+
 
             if (!Enum.IsDefined(typeof(TypeEnergie), tarif.TypeEnergie))
             {
@@ -81,17 +68,17 @@ namespace borne.business.Services
                 );
             }
 
-            tarifDAO.Update(tarif);
+            await tarifDAO.UpdateAsync(tarif);
         }
 
-        public void DeleteTarif(int idTarif)
+        public async Task DeleteTarifAsync(int idTarif)
         {
-            Tarif existingTarif = tarifDAO.GetById(idTarif);
+            Tarif existingTarif = await tarifDAO.GetByIdAsync(idTarif);
             if (existingTarif == null)
             {
                 throw new ArgumentException("Le tarif n'existe pas.");
             }
-            tarifDAO.Delete(existingTarif);
+            await tarifDAO.DeleteAsync(existingTarif);
         }
 
 

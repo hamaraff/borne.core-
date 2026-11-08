@@ -1,0 +1,91 @@
+services:
+  borne-a:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: borne-device:local
+    environment:
+      BORNE_ID: BORNE-TEST-001
+      BORNE_API_KEY: ${BORNE_A_API_KEY:?Set BORNE_A_API_KEY in your environment}
+      BORNE_CARD_HMAC_KEY: ${BORNE_A_CARD_HMAC_KEY:?Set BORNE_A_CARD_HMAC_KEY in your environment}
+      BORNE_DATA_PATH: /var/lib/borne/borne.db
+      BORNE_SIMULATION_ENABLED: "true"
+      BORNE_SIMULATION_INTERVAL_SECONDS: "5"
+      BORNE_SIMULATION_INCREMENT: "0.5"
+      CENTRAL_API_BASE_URL: ${CENTRAL_API_BASE_URL:-}
+      CENTRAL_API_TOKEN: ${BORNE_A_CENTRAL_API_TOKEN:-}
+    ports:
+      - "127.0.0.1:5001:8080"
+    volumes:
+      - borne_a_data:/var/lib/borne
+    networks:
+      - borne_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "dotnet", "borne.device.api.dll", "--health-probe"]
+      start_period: 10s
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  borne-b:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: borne-device:local
+    environment:
+      BORNE_ID: BORNE-TEST-002
+      BORNE_API_KEY: ${BORNE_B_API_KEY:?Set BORNE_B_API_KEY in your environment}
+      BORNE_CARD_HMAC_KEY: ${BORNE_B_CARD_HMAC_KEY:?Set BORNE_B_CARD_HMAC_KEY in your environment}
+      BORNE_DATA_PATH: /var/lib/borne/borne.db
+      BORNE_SIMULATION_ENABLED: "true"
+      BORNE_SIMULATION_INTERVAL_SECONDS: "5"
+      BORNE_SIMULATION_INCREMENT: "0.5"
+      CENTRAL_API_BASE_URL: ${CENTRAL_API_BASE_URL:-}
+      CENTRAL_API_TOKEN: ${BORNE_B_CENTRAL_API_TOKEN:-}
+    ports:
+      - "127.0.0.1:5002:8080"
+    volumes:
+      - borne_b_data:/var/lib/borne
+    networks:
+      - borne_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "dotnet", "borne.device.api.dll", "--health-probe"]
+      start_period: 10s
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  central-api:
+    profiles: ["central"]
+    build:
+      context: .
+      dockerfile: borne.central.api/Dockerfile
+    image: borne-central-api:local
+    environment:
+      CENTRAL_API_PORT: 8080
+      BORNE_DB_CONNECTION_STRING: "${BORNE_DB_CONNECTION_STRING:-}"
+      CentralApi__BorneTokens__BORNE-TEST-001: "${BORNE_A_CENTRAL_API_TOKEN:-}"
+      CentralApi__BorneTokens__BORNE-TEST-002: "${BORNE_B_CENTRAL_API_TOKEN:-}"
+      CentralApi__MonitoringToken: "${CENTRAL_API_MONITORING_TOKEN:-}"
+      CentralApi__TariffManagementToken: "${CENTRAL_API_TARIFF_MANAGEMENT_TOKEN:-}"
+    ports:
+      - "127.0.0.1:5080:8080"
+    networks:
+      - borne_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "dotnet", "borne.central.api.dll", "--health-probe"]
+      start_period: 10s
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  borne_a_data:
+  borne_b_data:
+
+networks:
+  borne_network:
+    name: borne_network

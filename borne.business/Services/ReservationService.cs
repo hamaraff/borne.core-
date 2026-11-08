@@ -1,123 +1,96 @@
-﻿using borne.core.Entities;
+using borne.core.Entities;
+using borne.core.Enums;
 using borne.core.IInfra;
-using System.Linq;
 
+namespace borne.business.Services;
 
-namespace borne.business.Services
+public class ReservationService
 {
-    public class ReservationService
+    private readonly IReservationDAO reservationDAO;
+
+    public ReservationService(IReservationDAO reservationDAO)
     {
-        private readonly IReservationDAO reservationDAO;
-        private readonly IClientDAO clientDAO;
+        this.reservationDAO = reservationDAO;
+    }
 
-        public ReservationService(
-            IReservationDAO reservationDAO,
-            IClientDAO clientDAO)
+    public Task<Reservation?> GetReservationByIdAsync(
+        int idReservation,
+        CancellationToken cancellationToken = default)
+    {
+        ValidateId(idReservation, nameof(idReservation));
+        return reservationDAO.GetByIdAsync(idReservation, cancellationToken);
+    }
+
+    public Task<List<Reservation>> GetAllReservationsAsync(
+        CancellationToken cancellationToken = default)
+    {
+        return reservationDAO.GetAllAsync(cancellationToken);
+    }
+
+    public async Task AddReservationAsync(
+        Reservation reservation,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(reservation);
+        if (reservation.IdReservation != 0)
         {
-            this.reservationDAO = reservationDAO;
-            this.clientDAO = clientDAO;
+            throw new ArgumentException("A new reservation must not have a database ID.");
         }
 
-        private bool HasConflict(Reservation reservation)
-        {
-            List<Reservation> reservations =
-                reservationDAO.GetByClientId(reservation.IdClient);
+        ValidateReservation(reservation);
+        await reservationDAO.AddAsync(reservation, cancellationToken);
+    }
 
-            return reservations.Any(r =>
-                r.IdReservation != reservation.IdReservation &&
-                r.DateDeb < reservation.DateFin &&
-                r.DateFin > reservation.DateDeb
-            );
+    public async Task UpdateReservationAsync(
+        Reservation reservation,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(reservation);
+        ValidateId(reservation.IdReservation, nameof(reservation.IdReservation));
+        ValidateReservation(reservation);
+
+        if (await reservationDAO.GetByIdAsync(
+                reservation.IdReservation,
+                cancellationToken) is null)
+        {
+            throw new KeyNotFoundException("The reservation was not found.");
         }
 
-        public void AddReservation(Reservation reservation)
+        await reservationDAO.UpdateAsync(reservation, cancellationToken);
+    }
+
+    public async Task DeleteReservationAsync(
+        int idReservation,
+        CancellationToken cancellationToken = default)
+    {
+        ValidateId(idReservation, nameof(idReservation));
+        if (await reservationDAO.GetByIdAsync(idReservation, cancellationToken) is null)
         {
-            if(reservation == null)
-            {
-                throw new ArgumentNullException(nameof(reservation));
-            }
-
-            Client client = clientDAO.GetById(reservation.IdClient);
-            if(client == null)
-            {
-                throw new ArgumentException(
-                    "Le client spécifié n'existe pas.",
-                    nameof(reservation.IdClient)
-);
-            }
-
-            if (reservation.DateDeb >= reservation.DateFin)
-            {
-                throw new ArgumentException("Date Debut doit être avant Date Fin");
-            }
-            if (HasConflict(reservation))
-            {
-                throw new ArgumentException(
-                    "Le client possède déjà une réservation durant cette période."
-                );
-            }
-
-            reservationDAO.Add(reservation);
+            throw new KeyNotFoundException("The reservation was not found.");
         }
 
-        public void UpdateReservation(Reservation reservation)
+        await reservationDAO.DeleteAsync(idReservation, cancellationToken);
+    }
+
+    private static void ValidateReservation(Reservation reservation)
+    {
+        if (reservation.DateDeb >= reservation.DateFin)
         {
-            if (reservation == null)
-            {
-                throw new ArgumentNullException(nameof(reservation));
-            }
-
-            Reservation existingReservation =
-                reservationDAO.GetById(reservation.IdReservation);
-
-            if (existingReservation == null)
-            {
-                throw new ArgumentException(
-                    "La réservation spécifiée n'existe pas.",
-                    nameof(reservation.IdReservation)
-                );
-            }
-
-            Client client = clientDAO.GetById(reservation.IdClient);
-
-            if (client == null)
-            {
-                throw new ArgumentException(
-                    "Le client spécifié n'existe pas.",
-                    nameof(reservation.IdClient)
-                );
-            }
-
-            if (reservation.DateDeb >= reservation.DateFin)
-            {
-                throw new ArgumentException(
-                    "La date de début doit être antérieure à la date de fin."
-                );
-            }
-
-            if (HasConflict(reservation))
-            {
-                throw new ArgumentException(
-                    "Le client possède déjà une réservation durant cette période."
-                );
-            }
-
-            reservationDAO.Update(reservation);
+            throw new ArgumentException("The reservation start must precede its end.");
         }
 
-        public void DeleteReservation(int idReservation)
+        ValidateId(reservation.IdBorne, nameof(reservation.IdBorne));
+        if (!Enum.IsDefined(reservation.TypeEnergie))
         {
-            Reservation reservation = reservationDAO.GetById(idReservation);
+            throw new ArgumentOutOfRangeException(nameof(reservation.TypeEnergie));
+        }
+    }
 
-            if (reservation == null)
-            {
-                throw new ArgumentException(
-                    "La réservation spécifiée n'existe pas.",
-                    nameof(idReservation)
-                );
-            }
-
-            reservationDAO.Delete(idReservation);
+    private static void ValidateId(int id, string parameterName)
+    {
+        if (id <= 0)
+        {
+            throw new ArgumentOutOfRangeException(parameterName, "The ID must be positive.");
         }
     }
 }

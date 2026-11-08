@@ -1,19 +1,18 @@
 ﻿using borne.core.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace borne.core.IInfra
 {
     public interface ITrancheDAO
     {
-        List<Tranche> GetAll();
-        List<Tranche> GetByTarifId(int tarifId);
+        Task<Tranche?> GetByIdAsync(int idTranche, CancellationToken cancellationToken = default);
+        Task<List<Tranche>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<List<Tranche>> GetByTarifIdAsync(
+            int tarifId,
+            CancellationToken cancellationToken = default);
 
-        void Add(Tranche tranche);
-        void Update(Tranche tranche);
-        void Delete(Tranche tranche);
+        Task AddAsync(Tranche tranche, CancellationToken cancellationToken = default);
+        Task UpdateAsync(Tranche tranche, CancellationToken cancellationToken = default);
+        Task DeleteAsync(Tranche tranche, CancellationToken cancellationToken = default);
     }
 }

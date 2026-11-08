@@ -1,19 +1,17 @@
 ﻿using borne.core.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace borne.core.IInfra
 {
     public interface ISeuilDAO
     {
-        Seuil GetById(int idSeuil);
-        List<Seuil> GetAll();
-        List<Seuil> GetByReservationId(int reservationId);
-        void Add(Seuil seuil);
-        void Update(Seuil seuil);
-        void Delete(int idSeuil);
+        Task<Seuil?> GetByIdAsync(int idSeuil, CancellationToken cancellationToken = default);
+        Task<List<Seuil>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<List<Seuil>> GetByReservationIdAsync(
+            int reservationId,
+            CancellationToken cancellationToken = default);
+        Task AddAsync(Seuil seuil, CancellationToken cancellationToken = default);
+        Task UpdateAsync(Seuil seuil, CancellationToken cancellationToken = default);
+        Task DeleteAsync(int idSeuil, CancellationToken cancellationToken = default);
     }
 }

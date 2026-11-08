@@ -51,7 +51,25 @@ Thumbs.db
 secrets.json
 *.usersecrets
 appsettings.*.Local.json
+**/appsettings.Local.json
+**/appsettings.Development.json
+.env
+.env.*
+!.env.example
+
+# Local SQLite runtime data
+**/*.db
+**/*.db-shm
+**/*.db-wal
+**/*.db-journal
+**/*.sqlite
+**/*.sqlite-*
+**/*.sqlite3
+
+# Local implementation checklist; project documentation lives in README.md
+IMPLEMENTATION_TASKS.md
 
 # Ignore compiled Python files (if any)
 __pycache__/
 *.pyc
+borne.device.api/data/

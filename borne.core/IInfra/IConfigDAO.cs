@@ -1,22 +1,31 @@
 ﻿using borne.core.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace borne.core.IInfra
 {
     public interface IConfigDAO
     {
-        List<ConfigBorne> GetAllConfigsBorne();
+        Task<List<ConfigBorne>> GetAllConfigsBorneAsync(
+            CancellationToken cancellationToken = default);
 
-        ConfigBorne GetConfigBorneById(int idConfigBorne);
+        Task<ConfigBorne?> GetConfigBorneByIdAsync(
+            int idConfigBorne,
+            CancellationToken cancellationToken = default);
 
-        void AddConfigBorne(ConfigBorne configBorne);
+        Task<ConfigBorne?> GetConfigBorneByCodeAsync(
+            string codeBorne,
+            CancellationToken cancellationToken = default);
 
-        void UpdateConfigBorne(ConfigBorne configBorne);
+        Task AddConfigBorneAsync(
+            ConfigBorne configBorne,
+            CancellationToken cancellationToken = default);
 
-        void DeleteConfigBorne(int idConfigBorne);
+        Task UpdateConfigBorneAsync(
+            ConfigBorne configBorne,
+            CancellationToken cancellationToken = default);
+
+        Task DeleteConfigBorneAsync(
+            int idConfigBorne,
+            CancellationToken cancellationToken = default);
     }
 }
